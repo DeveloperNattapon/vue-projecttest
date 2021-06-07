@@ -14,7 +14,8 @@
                                 <v-form ref="loginForm" v-model="valid" lazy-validation>
                                     <v-row>
                                         <v-col cols="12">
-                                            <v-text-field v-model="loginEmail" :rules="loginEmailRules" label="E-mail" required></v-text-field>
+                                            <!-- <v-text-field v-model="loginEmail" :rules="loginEmailRules" label="E-mail" required></v-text-field> -->
+                                            <v-text-field v-model="username" label="UserName" :rules="[rules.required]" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
                                             <v-text-field v-model="loginPassword" :append-icon="show1?'eye':'eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
@@ -70,13 +71,24 @@ export default {
    computed: {
     passwordMatch() {
       return () => this.password === this.verify || "Password must match";
-    }
+    },
+   
   },
   methods: {
     validate() {
-      if (this.$refs.loginForm.validate()) {
-        // submit form to server/API here...
+      const vm = this;
+      let userTmp = {
+          username : vm.username,
+          password : vm.loginPassword
       }
+      console.log("userTmp",userTmp);
+      if (!this.$refs.loginForm.validate()) return;
+        store.set("Login/setUser!",userTmp).then( res => {
+            if(res == true){
+                vm.$router.push("/Home")
+            }
+          
+        });
     },
     reset() {
       this.$refs.form.reset();
@@ -89,8 +101,8 @@ export default {
     dialog: true,
     tab: 0,
     tabs: [
-        {name:"Login", icon:"mdi-account"},
-        {name:"Register", icon:"mdi-account-outline"}
+        {name:"Login", icon:"mdi-account"}
+        //{name:"Register", icon:"mdi-account-outline"}
     ],
     valid: true,
     
@@ -114,7 +126,11 @@ export default {
     rules: {
       required: value => !!value || "Required.",
       min: v => (v && v.length >= 8) || "Min 8 characters"
-    }
+    },
+    usernaemRules:{
+        required: value => !!value || "Required UserName."
+    },
+    username : ""
   })
 }
 </script>
