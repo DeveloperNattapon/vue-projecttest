@@ -79,9 +79,9 @@
     <template v-slot:append>
       <base-item
         :item="{
-          title: $t('upgrade'),
-          icon: 'mdi-package-up',
-          to: '/upgrade',
+          title: $t('LogOut'),
+          icon: 'mdi-arrow-left-bold-circle-outline',
+          to: 'login/Login',
         }"
       />
     </template>
@@ -105,43 +105,16 @@ export default {
   },
 
   data: () => ({
-    items: [
-      {
+    items: [    {
         icon: 'mdi-view-dashboard',
         title: 'dashboard',
         to: '/'
-      },
-      {
-        icon: 'mdi-account',
-        title: 'user',
-        to: '/pages/user'
-      },
-      {
-        title: 'rtables',
-        icon: 'mdi-clipboard-outline',
-        to: '/tables/regular-tables'
-      },
-      {
-        title: 'typography',
-        icon: 'mdi-format-font',
-        to: '/components/typography'
-      },
-      {
-        title: 'icons',
-        icon: 'mdi-chart-bubble',
-        to: '/components/icons'
-      },
-      {
-        title: 'google',
-        icon: 'mdi-map-marker',
-        to: '/maps/google-maps'
-      },
-      {
-        title: 'notifications',
-        icon: 'mdi-bell',
-        to: '/components/notifications'
-      }
-    ]
+    },
+    {
+        icon: "",
+        title: 'About',
+        to: '/views/About'
+    }  ]
   }),
 
   computed: {
