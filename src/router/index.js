@@ -3,28 +3,29 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-const routes = [{
-  path: '/',
-  component: () => import('../views/Index.vue'),
-  children: [
-    // Dashboard
-    {
-      name: 'Dashboard',
-      path: '',
-      component: () => import('@/views/Dashboard')
-    },
-    {
-      path: 'views/about',
-      name: 'About',
-      component: () => import('@/views/About.vue')
-    },
-    {
-      name: 'LogOut',
-      path: 'login/Login',
-      component: () => import('@/views/login/Login.vue')
-    }
-  ]
-}, ]
+const routes = [
+  
+  {
+    path:'/login',
+    component: () => import('@/views/login/Login.vue')
+  },
+  {
+    path: '/',
+    component: () => import('../views/Index.vue'),
+    children: [
+      {
+        name: 'Dashboard',
+        path: '',
+        component: () => import('@/views/Dashboard')
+      },
+    ]
+  },
+  {
+    path:'*',
+    redirect:'/'
+
+  }
+]
 
 const router = new VueRouter({
   mode: 'history',
