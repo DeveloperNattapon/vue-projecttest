@@ -1,5 +1,5 @@
 import {make} from 'vuex-pathify'
- import router from '../../../router'
+import router from '../../../router'
 
 const user = JSON.parse(localStorage.getItem('user'));
 const state = () => {
@@ -41,6 +41,8 @@ const actions = {
         localStorage.removeItem('user');
         commit('logout');
     },
+
+    
 }
 
 
@@ -66,9 +68,10 @@ const mutations = {
 }
 
 
+
 export default {
     namespaced: true,
     state,
     actions,
-    mutations
+    mutations,
 }

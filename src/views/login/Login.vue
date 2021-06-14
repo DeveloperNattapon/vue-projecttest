@@ -9,27 +9,31 @@
                                 Login
                             </div>
                         </template>
-                        <v-form ref="loginForm" v-model="valid">
-                            <v-container class="py-0">
+                        <v-form ref="loginForm" v-model="valid" lazy-validation>
+                            <v-container class="py-6">
                                 <v-row>
                                     <v-col cols="12" md="12">
                                         <v-text-field class="purple-input" label="User Name" prepend-icon='mdi-account'
-                                            v-model="username" required :rules="[rules.required]" />
+                                            v-model="username" required :rules="[rules.required]" outlined/>
                                     </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col cols="12" md="12">
                                         <v-text-field label="Password" class="purple-input" prepend-icon="mdi-lock"
-                                            v-model="password" required :append-icon="show1?'eye':'eye-off'"
+                                            v-model="password" required :append-icon="show1?'mdi-eye':'mdi-eye-off'"
                                             :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'"
                                             name="input-10-1" hint="At least 8 characters" counter
-                                            @click:append="show1 = !show1" />
+                                            @click:append="show1 = !show1" outlined/>
                                     </v-col>
 
                                     <v-col cols="12" class="text-right">
-                                        <v-btn color="success" class="mr-0" @click="SubmitLogion" :disabled="!valid">
+
+                                        <v-btn color="success" class="mr-4" @click="submitLogion"
+                                            :disabled="!valid">
                                             Login
                                         </v-btn>
+                                        <router-link to="/register">Register</router-link>
+
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -42,10 +46,13 @@
 </template>
 
 <script>
-import {mapState , mapActions} from 'vuex'
+    import {
+        mapState,
+        mapActions
+    } from 'vuex'
     export default {
         components: {
-            ...mapState('Login',['status'])
+            ...mapState('Login', ['status'])
         },
         computed: {
 
@@ -67,7 +74,6 @@ import {mapState , mapActions} from 'vuex'
                 password: "",
                 verify: "",
                 loginPassword: "",
-                submitted: false,
                 show1: false,
                 rules: {
                     required: value => !!value || "Required.",
@@ -78,19 +84,22 @@ import {mapState , mapActions} from 'vuex'
                 }
             }
         },
-        created (){
+        created() {
             this.logout();
         },
         methods: {
-            ...mapActions('Login',['login','logout']),
-            SubmitLogion() {
+            ...mapActions('Login', ['login', 'logout']),
+            submitLogion() {
                 const {
                     username,
                     password
                 } = this;
                 if (!this.$refs.loginForm.validate()) return
                 console.log(username);
-                localStorage.setItem('user', JSON.stringify({username,password}));
+                localStorage.setItem('user', JSON.stringify({
+                    username,
+                    password
+                }));
                 if (username && password) {
                     this.login({
                         username,

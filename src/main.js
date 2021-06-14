@@ -12,15 +12,13 @@ Vue.config.productionTip = false
 
 router.beforeEach((to,from,next) => {
     
-  const publicPages = ["/login"];
+  const publicPages = ["/login","/register"];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem('user');
   console.log("Pages",to);
-  console.log("authRequired",authRequired)
   if (authRequired && !loggedIn) {
     return next('/login');
   }
-  console.log(loggedIn)
   next();
 })
 
