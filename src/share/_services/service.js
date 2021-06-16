@@ -1,18 +1,19 @@
-import axios from 'axios'
+import Axios from 'axios';
 import {apiBaseUrl} from '@/environment/environment'
 import {GetSessionToken} from '../index'
 const pURL = require('url')
 
-const config = {
-    baseURL : apiBaseUrl
-}
 const noTokenUrl = [
     'Users/me',
     'Users/Token',
     'Users/Refresh',
   ];
-const httpClient = axios.create(config);
-const refreshTokenClient = axios.create(config);
+
+const config = {
+    baseURL : apiBaseUrl,
+}
+const httpClient = Axios.create(config);
+const refreshTokenClient = Axios.create(config);
 
 const apiPath = (url) => {
     let retVal = '';

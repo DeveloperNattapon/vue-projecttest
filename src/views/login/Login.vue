@@ -50,6 +50,7 @@
         mapState,
         mapActions
     } from 'vuex'
+    import {service} from './services/services';
     export default {
         components: {
             ...mapState('Login', ['status'])
@@ -110,7 +111,9 @@
             }
         },
         mounted() {
-
+          service.apiGetStock().then(res => {
+              console.log(res);
+          });
 
         }
     };

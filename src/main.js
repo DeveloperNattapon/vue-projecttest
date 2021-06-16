@@ -5,11 +5,12 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import './plugins/index'
 import i18n from './i18n'
-
+import VueAxios from "vue-axios"
+import axios from "axios"
 
 Vue.config.devtools = true
 Vue.config.productionTip = false
-
+Vue.use(VueAxios,axios)
 router.beforeEach((to,from,next) => {
     
   const publicPages = ["/login","/register"];

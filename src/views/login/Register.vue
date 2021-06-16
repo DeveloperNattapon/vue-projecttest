@@ -54,7 +54,7 @@
                                         label="Password" 
                                         class="purple-input" 
                                         outlined  
-                                        v-model="user.Password" 
+                                        v-model="password" 
                                         required 
                                         :append-icon="show1?'mdi-eye':'mdi-eye-off'"
                                         :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'"
@@ -94,14 +94,16 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import { Encrypt,CryptoKey} from "../../share/index";
+
     export default {
         components: {
 
         },
         computed:{
         passwordMatch() {
-            return () => this.user.Password === this.verify || "Password must match";
+            return () => this.password === this.verify || "Password must match";
         }
         },
         data(){
@@ -111,6 +113,7 @@ import { Encrypt,CryptoKey} from "../../share/index";
                 valid: true,
                 verify: "",
                 show1: false,
+                password:"",
                 user:
                 {
                     UserName:"",
@@ -129,6 +132,7 @@ import { Encrypt,CryptoKey} from "../../share/index";
             }
         },
         methods:{
+            ...mapActions('Login', ['register']),
             reset() {
                 this.$refs.form.reset();
             },
@@ -138,8 +142,16 @@ import { Encrypt,CryptoKey} from "../../share/index";
             registerSubmit(){
                 let key = CryptoKey()
                 if (!this.$refs.loginForm.validate()) return
-                    let encrtptpass = Encrypt(this.user.Password,key);
-                    console.log(encrtptpass)
+                   const {
+                        FirstName,
+                        LastName,
+                        user,
+                        password
+                    } = this;
+                   let encrtptpass = Encrypt(password,key);
+                    user.RealName = FirstName + " " + LastName
+                    user.Password = encrtptpass                   
+                    this.register(user);
             },
             clear () {
                 this.FirstName = ''

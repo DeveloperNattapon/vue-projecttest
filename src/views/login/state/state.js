@@ -1,5 +1,6 @@
 import {make} from 'vuex-pathify'
 import router from '../../../router'
+import {service} from '../services/services';
 
 const user = JSON.parse(localStorage.getItem('user'));
 const state = () => {
@@ -41,7 +42,22 @@ const actions = {
         localStorage.removeItem('user');
         commit('logout');
     },
-
+    register({dispatch,commit},user){
+        commit('registerRequest',user);
+        service.apiSaveUserAccount(user).then(res => {         
+            if(res.success){
+                commit('registerSuccess',res.data.stock.data);
+                router.push('/login');
+                setTimeout(() => {
+                    dispatch('alert/success', 'Registration successful', { root: true });
+                })
+            }
+          
+        }).catch(error => {
+            console.log("Error -->", error)
+            dispatch('alert/error', error, { root: true });
+        })
+    }
     
 }
 
@@ -65,6 +81,12 @@ const mutations = {
         state.status = {};
         state.user = null;
     }, 
+    registerRequest(state) {
+        state.status = { registering: true };
+    },
+    registerSuccess(state) {
+        state.status = {};
+    },
 }
 
 
