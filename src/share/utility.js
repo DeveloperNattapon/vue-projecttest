@@ -1,18 +1,25 @@
 
 import {SimpleCrypto} from 'simple-crypto-js'
+var CryptoJS = require("crypto-js");
+let key = "123#$%";
 
 const CryptoKey = () => {
     return SimpleCrypto.generateRandom(256);
 }
-
 const Encrypt = (message, key) => {
     const simpleCrypto = new SimpleCrypto(key);
     return simpleCrypto.encrypt(message);
 }
-
+const EncryptData = (message) => {
+    const encrypt = CryptoJS.HmacSHA1(message,key).toString();
+    return encrypt;
+}
 const Decrypt = (message, key) => {
     const simpleCrypto = new SimpleCrypto(key);
     return simpleCrypto.decrypt(message);
+}
+const DecryptData = (message) => {
+    return CryptoJS.AES.decrypt(message,key).toString(CryptoJS.enc.Utf8);
 }
 const GetSessionToken = () => {
     let retVal = null;
@@ -35,5 +42,7 @@ export {
     CryptoKey,
     Encrypt,
     Decrypt,
-    GetSessionToken
+    GetSessionToken,
+    EncryptData,
+    DecryptData
 }

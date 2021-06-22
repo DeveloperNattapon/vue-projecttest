@@ -49,8 +49,21 @@
                                         required 
                                         :rules="emailRules"
                                 />
-
-                                <v-text-field 
+                                 <v-text-field
+                                    autocomplete="current-password"
+                                    v-model="password" 
+                                    label="Password" 
+                                    class="purple-input" 
+                                    outlined  
+                                    hint="Your password passed! Password rules are not meant to be broken!"
+                                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                                    @click:append="() => (show1 = !show1)"
+                                    :type="show1 ? 'text' : 'password'"
+                                    :rules="[rules.required,rules.password]"
+                                    @input="_=>userPassword=_"
+                                    required
+                                ></v-text-field>
+                                <!-- <v-text-field 
                                         label="Password" 
                                         class="purple-input" 
                                         outlined  
@@ -60,7 +73,7 @@
                                         :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'"
                                          name="input-10-1" hint="At least 8 characters" counter
                                         @click:append="show1 = !show1" 
-                                />                       
+                                />                        -->
                                  <v-text-field 
                                         block v-model="verify" 
                                         outlined
@@ -95,7 +108,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import { Encrypt,CryptoKey} from "../../share/index";
+import { EncryptData} from "../../share/index";
 
     export default {
         components: {
@@ -123,7 +136,14 @@ import { Encrypt,CryptoKey} from "../../share/index";
                 } ,
                 rules: {
                     required: value => !!value || "Required.",
-                    min: v => (v && v.length >= 8) || "Min 8 characters"
+                    min: v => (v && v.length >= 8) || "Min 8 characters",
+                    password : v => {
+                        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+                         return (
+                            pattern.test(v) ||
+                            "Min. 8 characters with at least one capital letter, a number and a special character."
+                        );
+                    }
                 },   
                  emailRules: [
                     v => !!v || "Required",
@@ -140,15 +160,14 @@ import { Encrypt,CryptoKey} from "../../share/index";
                 this.$refs.form.resetValidation();
             },
             registerSubmit(){
-                let key = CryptoKey()
-                if (!this.$refs.loginForm.validate()) return
-                   const {
-                        FirstName,
-                        LastName,
-                        user,
-                        password
-                    } = this;
-                   let encrtptpass = Encrypt(password,key);
+            if (!this.$refs.loginForm.validate()) return
+                const {
+                    FirstName,
+                    LastName,
+                    user,
+                    password
+                } = this;
+                   let encrtptpass = EncryptData(password);
                     user.RealName = FirstName + " " + LastName
                     user.Password = encrtptpass                   
                     this.register(user);

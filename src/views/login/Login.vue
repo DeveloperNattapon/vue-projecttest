@@ -50,7 +50,7 @@
         mapState,
         mapActions
     } from 'vuex'
-    import {service} from './services/services';
+    //import {service} from './services/services';
     export default {
         components: {
             ...mapState('Login', ['status'])
@@ -96,12 +96,12 @@
                     password
                 } = this;
                 if (!this.$refs.loginForm.validate()) return
-                console.log(username);
                 localStorage.setItem('user', JSON.stringify({
                     username,
                     password
                 }));
-                if (username && password) {
+              
+                if (username && password) { 
                     this.login({
                         username,
                         password
@@ -111,10 +111,7 @@
             }
         },
         mounted() {
-          service.apiGetStock().then(res => {
-              console.log(res);
-          });
-
+          
         }
     };
 
