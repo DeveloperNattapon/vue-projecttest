@@ -14,22 +14,29 @@
                                 <v-row>
                                     <v-col cols="12" md="12">
                                         <v-text-field class="purple-input" label="User Name" prepend-icon='mdi-account'
-                                            v-model="username" required :rules="[rules.required]" outlined/>
+                                            v-model="username" required :rules="[rules.required]" outlined />
                                     </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col cols="12" md="12">
-                                        <v-text-field label="Password" class="purple-input" prepend-icon="mdi-lock"
+                                        <!-- <v-text-field label="Password" class="purple-input" prepend-icon="mdi-lock"
                                             v-model="password" required :append-icon="show1?'mdi-eye':'mdi-eye-off'"
                                             :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'"
                                             name="input-10-1" hint="At least 8 characters" counter
-                                            @click:append="show1 = !show1" outlined/>
+                                            @click:append="show1 = !show1" outlined/> -->
+
+                                        <v-text-field autocomplete="current-password" v-model="password"
+                                            label="Password" class="purple-input" outlined prepend-icon="mdi-lock"
+                                            hint="Your password passed! Password rules are not meant to be broken!"
+                                            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                                            @click:append="() => (show1 = !show1)" :type="show1 ? 'text' : 'password'"
+                                            :rules="[rules.required,rules.password]" @input="_=>userPassword=_"
+                                            required></v-text-field>
                                     </v-col>
 
                                     <v-col cols="12" class="text-right">
 
-                                        <v-btn color="success" class="mr-4" @click="submitLogion"
-                                            :disabled="!valid">
+                                        <v-btn color="success" class="mr-4" @click="submitLogion" :disabled="!valid">
                                             Login
                                         </v-btn>
                                         <router-link to="/register">Register</router-link>
@@ -78,7 +85,14 @@
                 show1: false,
                 rules: {
                     required: value => !!value || "Required.",
-                    min: v => (v && v.length >= 8) || "Min 8 characters"
+                    min: v => (v && v.length >= 8) || "Min 8 characters",
+                    password: v => {
+                         const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+                         return (
+                            pattern.test(v) ||
+                            "Min. 8 characters with at least one capital letter, a number and a special character."
+                        );
+                    }
                 },
                 loginNameRules: {
                     required: value => !!value || "กรุณากรอบ."
@@ -100,8 +114,8 @@
                     username,
                     password
                 }));
-              
-                if (username && password) { 
+
+                if (username && password) {
                     this.login({
                         username,
                         password
@@ -111,7 +125,7 @@
             }
         },
         mounted() {
-          
+
         }
     };
 

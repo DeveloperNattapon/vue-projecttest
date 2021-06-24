@@ -138,7 +138,7 @@ import { EncryptData} from "../../share/index";
                     required: value => !!value || "Required.",
                     min: v => (v && v.length >= 8) || "Min 8 characters",
                     password : v => {
-                        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+                        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
                          return (
                             pattern.test(v) ||
                             "Min. 8 characters with at least one capital letter, a number and a special character."

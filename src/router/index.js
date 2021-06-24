@@ -7,29 +7,38 @@ const routes = [
   
   {
     path:'/login',
-    component: () => import('@/views/login/Login.vue')
+    component: () => import('@/views/login/Login'),
   },
   {
     path:'/register',
     name:"Register",
-    component:() => import('@/views/login/Register.vue')
+    component:() => import('@/views/login/Register')
   },
   {
     path: '/',
-    component: () => import('../views/Index.vue'),
+    component: () => import('../views/Index'),
     children: [
       {
         name: 'Dashboard',
         path: '',
         component: () => import('@/views/Dashboard')
       },
+      {
+        
+        name: 'Menu',
+        path: '/mainMenu',
+        component: () => import('@/views/setting/menu/MainMenu'),
+        
+      },
     ]
   },
+
   {
     path:'*',
     redirect:'/'
 
-  }
+  },
+
 ]
 
 const router = new VueRouter({

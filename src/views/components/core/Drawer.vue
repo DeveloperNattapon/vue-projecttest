@@ -19,12 +19,12 @@
 
     <v-list dense nav>
       <v-list-item>
-        <v-list-item-avatar class="align-self-center" color="white" contain>
+        <!-- <v-list-item-avatar class="align-self-center" color="white" contain>
           <v-img
             src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
             max-height="30"
           />
-        </v-list-item-avatar>
+        </v-list-item-avatar> -->
 
         <v-list-item-content>
           <v-list-item-title class="display-1" v-text="profile.title" />
@@ -33,22 +33,58 @@
     </v-list>
 
     <v-divider class="mb-2" />
-
-    <v-list expand nav>
-      <!-- Style cascading bug  -->
-      <!-- https://github.com/vuetifyjs/vuetify/pull/8574 -->
-      <div />
-
+    <!-- <v-list expand nav>   
       <template v-for="(item, i) in computedItems">
         <base-item-group v-if="item.children" :key="`group-${i}`" :item="item">
         </base-item-group>
 
         <base-item v-else :key="`item-${i}`" :item="item" />
       </template>
+    </v-list> -->
+    <v-list expand nav>
+      <template v-for="item in computedItems">
+        <v-list-group
+          :group="'attractions'"
+          :key="item.title"
+          v-if="item.items !== undefined"
+          v-model="item.active"
+          no-action
+          link
+        >
+          <template v-slot:activator>
+            <v-list-item-avatar left>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-avatar>
 
-      <!-- Style cascading bug  -->
-      <!-- https://github.com/vuetifyjs/vuetify/pull/8574 -->
-      <div />
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title"></v-list-item-title>
+            </v-list-item-content>
+          </template>
+
+          <v-list-item
+            v-for="subItem in item.items"
+            :key="subItem.title"
+            link
+            router
+            :to="subItem.to"
+          >
+            <v-list-item-avatar left>
+              <v-icon>{{ subItem.icon }}</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title v-text="subItem.title"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group>
+        <v-list-item v-else :key="item.title" link router :to="item.to">
+          <v-list-item-avatar left>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title"></v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
     </v-list>
 
     <!-- <template v-slot:append>
@@ -67,7 +103,7 @@
 
 <script>
 // Utilities
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "DashboardCoreDrawer",
@@ -78,15 +114,33 @@ export default {
       default: false,
     },
   },
-
+  components: {},
   data: () => ({
     items: [
       {
+        title: "Dashboard",
         icon: "mdi-view-dashboard",
-        title: "dashboard",
         to: "/",
       },
-    ]
+      {
+        title: "Settings",
+        icon: "mdi-cog-box",
+        items: [
+          {
+            title: "Menu",
+            icon: "mdi-currency-eth",
+            to: "/mainMenu",
+          },
+          {
+            title: "Register",
+            icon: "mdi-account-details",
+            to: "/register",
+          },
+        ],
+      },
+    ],
+    currentSelection: "",
+    userlogin: localStorage.getItem("userLogin"),
   }),
 
   computed: {
@@ -105,12 +159,17 @@ export default {
     profile() {
       return {
         avatar: true,
-        title: this.$t("avatar"),
+        title: JSON.parse(this.userlogin).realName
+          ? null
+          : JSON.parse(this.userlogin).userName,
       };
-    }
+    },
   },
 
   methods: {
+    ...mapMutations({
+      getAlluser: "Login/loginSuccess",
+    }),
     mapItem(item) {
       return {
         ...item,
@@ -118,7 +177,29 @@ export default {
         title: this.$t(item.title),
       };
     },
-
+  },
+  mounted() {
+    console.log("mountrd", this.computedItems);
+  },
+  created() {
+    // this.currentSelection = this.items[0].text;
+    // // retain the current route from this.$route.name or path and set it to current variable
+    // var current = ""; // set from this.$route
+    // // var current = 'Print'; // for testing comment above line and uncomment this line
+    // if (current) {
+    //   var self = this;
+    //   this.items.forEach((item, i) => {
+    //     if (item.text == current) {
+    //       this.currentSelection = current;
+    //     }
+    //     if (item.children && item.children.length) {
+    //       if (item.children.map((x) => x.text).includes(current)) {
+    //         self.items[i].model = true;
+    //         this.currentSelection = current;
+    //       }
+    //     }
+    //   });
+    // }
   },
 };
 </script>

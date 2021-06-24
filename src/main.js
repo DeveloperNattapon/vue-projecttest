@@ -12,7 +12,6 @@ Vue.config.devtools = true
 Vue.config.productionTip = false
 Vue.use(VueAxios,axios)
 router.beforeEach((to,from,next) => {
-    
   const publicPages = ["/login","/register"];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem('user');

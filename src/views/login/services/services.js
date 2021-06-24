@@ -17,6 +17,7 @@ const apiGetStock = () => {
 }
 const logout = () => {
     localStorage.removeItem('user')
+    localStorage.removeItem("userLogin");
 }
 
 const UserCheck = parameter => {
